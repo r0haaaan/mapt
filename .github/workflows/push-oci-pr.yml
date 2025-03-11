@@ -25,7 +25,8 @@ on:
   
 jobs:
   push:
-    name: artifact-check-push
+    name: artifact-check-then-push
+
     if: |
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'pull_request'
@@ -42,6 +43,7 @@ jobs:
       - name: Check if Artifact is Present
         id: artifact-check
         run: |
+          ls
           if [ ! -d "mapt-arm64-and-amd64" ]; then
             echo "Artifact not found."
             echo "found=false" >> $GITHUB_ENV
