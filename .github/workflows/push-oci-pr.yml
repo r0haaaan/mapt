@@ -26,7 +26,6 @@ on:
 jobs:
   push:
     name: artifact-check-then-push
-
     if: |
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'pull_request'
@@ -44,12 +43,12 @@ jobs:
         id: artifact-check
         run: |
           ls
-          if [ ! -d "mapt-arm64-and-amd64" ]; then
-            echo "Artifact not found."
-            echo "found=false" >> $GITHUB_ENV
-          else
-            echo "Artifact found."
+          if [ -f "mapt-amd64.tar" ] && [ -f "mapt-arm64.tar" ]; then
+            echo "Artifacts found."
             echo "found=true" >> $GITHUB_ENV
+          else
+            echo "Artifacts not found."
+            echo "found=false" >> $GITHUB_ENV
           fi
       - name: Get mapt build information
         if: env.found == 'true'
